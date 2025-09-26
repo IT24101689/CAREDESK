@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface ArticleRepository extends JpaRepository<Article, Long> {
     List<Article> findByTitleContainingIgnoreCase(String title);
+    boolean existsByCategoryId(Long categoryId);  // For delete check
 }
