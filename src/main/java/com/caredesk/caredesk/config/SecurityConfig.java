@@ -15,15 +15,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .securityMatcher("/admin/**", "/faq/**", "/css/**", "/js/**", "/images/**", "/webjars/**", "/**") // Explicitly match all other paths
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        // Public FAQ (list + detail)
                         .requestMatchers("/faq", "/faq/**").permitAll()
-                        // static assets (optional but recommended)
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
-                        // Admin requires login
                         .requestMatchers("/admin/**").authenticated()
-                        // everything else OK
                         .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
