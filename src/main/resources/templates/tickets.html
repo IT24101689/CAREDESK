@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Tickets</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Reuse styles from customer_dashboard.html (dashboard-card, etc.) -->
+    <style>
+        /* Add styles from other pages for consistency (background, card) */
+        html, body {
+            margin: 0;
+            height: 100%;
+            font-family: 'Inter', Arial, sans-serif;
+            background: url('https://images.unsplash.com/photo-1581091870622-df5f2ed3fc35?auto=format&fit=crop&w=1470&q=80') no-repeat center center;
+            background-size: cover;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 50px;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(245,245,247,0.35);
+            z-index: 0;
+        }
+
+        .dashboard-card {
+            position: relative;
+            z-index: 1;
+            background: rgba(255,255,255,0.85);
+            border-radius: 16px;
+            padding: 4rem 4rem;
+            box-shadow: 0 24px 40px rgba(0,0,0,0.06);
+            backdrop-filter: blur(6px);
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .btn-primary {
+            background-color: #111827;
+            color: #fff;
+            border: none;
+            border-radius: 9999px;
+            padding: 0.65rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.25s ease;
+            text-decoration: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #1f2937;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard-card">
+    <h1>My Tickets</h1>
+    <br>
+    <a href="/customer/tickets/new" class="btn-primary mb-3">Create New Ticket</a>
+    <br>
+    <br>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Subject</th>
+            <th>Status</th>
+            <th>Created At</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="ticket : ${tickets}">
+            <td th:text="${ticket.subject}"></td>
+            <td th:text="${ticket.status}"></td>
+            <td th:text="${ticket.createdAt}"></td>
+            <td>
+                <a th:href="@{/customer/tickets/{id}(id=${ticket.id})}" class="btn-primary">View</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <br>
+    <a href="/customer/dashboard" class="btn-primary mt-3">Back to Dashboard</a>
+</div>
+</body>
+</html>

@@ -1,35 +1,39 @@
 package com.caredesk.caredesk.model;
 
 import jakarta.persistence.*;
-import lombok.Data;  // Add if using Lombok (already in pom.xml)
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 
 @Entity
-@Table(name = "admins")
-@Data  // Use Lombok for getters/setters if preferred; otherwise keep manual
-public class Admin implements UserDetails {
+@Table(name = "customers")  // Table name in MySQL
+@Data
+public class Customer implements UserDetails {  // Implement UserDetails for Spring Security
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String username;
-
     @Column(nullable = false)
-    private String password;
+    private String name;
 
+    @Column
+    private String address;
+
+    @Column(name = "mobile_no")
+    private String mobileNo;
+
+    @Column(nullable = false, unique = true)
     private String email;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(nullable = false)
+    private String password;  // Store hashed password (use BCrypt)
 
     @Column(nullable = false)
-    private String role = "ADMIN";  // Default role
+    private String role = "CUSTOMER";  // Default role
 
     // UserDetails methods
     @Override
@@ -39,7 +43,7 @@ public class Admin implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;  // Use username for admin login
+        return email;  // Use email as username for login
     }
 
     @Override
