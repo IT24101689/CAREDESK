@@ -37,11 +37,11 @@ public class ArticleService {
         articleRepository.deleteById(id);
     }
 
-    // Search by title
-    public List<Article> searchByTitle(String query) {
+    // Updated: Search title OR content
+    public List<Article> searchByQuery(String query) {
         if (query == null || query.isEmpty()) {
             return findAll();
         }
-        return articleRepository.findByTitleContainingIgnoreCase(query);
+        return articleRepository.searchByTitleOrContent(query);
     }
 }

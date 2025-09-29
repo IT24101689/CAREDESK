@@ -148,7 +148,7 @@
 
     <div class="faq-articles-wrapper">
         <div th:if="${articles.isEmpty()}">
-            <p>No articles found.</p>
+            <p>No articles found for "<span th:text="${query}"></span>". Try different keywords or check spelling.</p>
         </div>
 
         <div th:each="article : ${articles}" class="faq-article">

@@ -19,20 +19,19 @@ public class FaqController {
 
     @GetMapping("/faq")
     public String showFaqPage(Model model, @RequestParam(required = false) String query) {
-        List<Article> articles = articleService.searchByTitle(query);
+        List<Article> articles = articleService.searchByQuery(query);  // Updated to new method
         model.addAttribute("articles", articles);
-        model.addAttribute("query", query); // Keep search input populated
+        model.addAttribute("query", query);
         return "faq";
     }
 
-    // ✅ Mapping for Read More
     @GetMapping("/faq/{id}")
     public String showArticleDetail(@PathVariable Long id, Model model) {
         Article article = articleService.findById(id);
         if (article == null) {
-            return "redirect:/faq"; // fallback if not found
+            return "redirect:/faq";
         }
         model.addAttribute("article", article);
-        return "article_detail"; // Thymeleaf template
+        return "article_detail";
     }
 }
