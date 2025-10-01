@@ -38,7 +38,7 @@ public class AdminController {
             ticket.setAssignedAgentId(agentId); // Assign to agent
             ticket.setAdmin(admin); // Optional: Track admin oversight
             return ResponseEntity.ok(ticketRepository.save(ticket));
-        }).orElseGet(() -> ResponseEntity.notFound().build());
+        })).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // Update Customer DB (Placeholder for integration with CustomerController)
