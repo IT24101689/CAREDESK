@@ -1,13 +1,72 @@
 package com.caredesk.caredesk.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import com.caredesk.caredesk.model.Admin;
+import com.caredesk.caredesk.model.Ticket;
+import com.caredesk.caredesk.model.Agent;
+import com.caredesk.caredesk.repository.AdminRepository;
+import com.caredesk.caredesk.repository.TicketRepository;
+import com.caredesk.caredesk.repository.AgentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/api/admin")
 public class AdminController {
 
-    @GetMapping("/admin/dashboard")
-    public String showDashboard() {
-        return "redirect:/admin/articles";  // Redirect dashboard to articles list
+    @Autowired
+    private AdminRepository adminRepository;
+
+    @Autowired
+    private TicketRepository ticketRepository;
+
+    @Autowired
+    private AgentRepository agentRepository;
+
+    // Manage User (Update/Remove)
+    @PostMapping("/manageUser")
+    public ResponseEntity<Admin> manageUser(@RequestBody Admin admin) {
+        Admin savedAdmin = adminRepository.save(admin);
+        return ResponseEntity.ok(savedAdmin);
+    }
+
+    // Assign Roles
+    @PostMapping("/assignRole")
+    public ResponseEntity<Admin> assignRole(@RequestParam Long adminId, @RequestParam String role) {
+        Optional<Admin> adminOpt = adminRepository.findById(adminId);
+        return adminOpt.map(admin -> {
+            admin.setRole(role);
+            return ResponseEntity.ok(adminRepository.save(admin));
+        }).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    // Assign Tickets to Agents
+    @PostMapping("/assignTicket")
+    public ResponseEntity<Ticket> assignTicket(@RequestParam Long ticketId, @RequestParam Long agentId) {
+        Optional<Ticket> ticketOpt = ticketRepository.findById(ticketId);
+        Optional<Agent> agentOpt = agentRepository.findById(agentId); // Uses Agent class
+        return ticketOpt.flatMap(ticket -> agentOpt.map(agent -> {
+            ticket.setAgent(agent);
+            return ResponseEntity.ok(ticketRepository.save(ticket));
+        })).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    // Update Customer DB (Placeholder for integration with CustomerController)
+    @PostMapping("/updateCustomerDB")
+    public ResponseEntity<String> updateCustomerDB(@RequestParam Long adminId) {
+        Optional<Admin> adminOpt = adminRepository.findById(adminId);
+        return adminOpt.map(admin -> {
+            // Logic to update customer database, potentially calling CustomerController
+            return ResponseEntity.ok("Customer DB updated by Admin ID: " + adminId);
+        }).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    // Get all admins
+    @GetMapping("/all")
+    public ResponseEntity<List<Admin>> getAllAdmins() {
+        return ResponseEntity.ok(adminRepository.findAll());
     }
 }

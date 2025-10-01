@@ -13,6 +13,10 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String title;
+    private String description;
+    private Long assignedAgentId;
+
     @Column(nullable = false)
     private String subject;
 
@@ -32,4 +36,8 @@ public class Ticket {
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;  // Link to user
+
+    @ManyToOne
+    @JoinColumn(name = "admin_id") // Optional: Tracks admin oversight
+    private Admin admin; // Link to admin for management
 }

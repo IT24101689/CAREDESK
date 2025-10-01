@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
-    List<Ticket> findByCustomerId(Long customerId);  // For user's tickets
+    List<Ticket> findByCustomerId(Long customerId);
+    List<Ticket> findByAgent_Id(Long agentId); // For user's tickets
 }
