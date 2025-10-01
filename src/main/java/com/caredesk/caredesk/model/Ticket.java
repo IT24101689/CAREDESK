@@ -13,6 +13,10 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String title;
+    private String description;
+    private Long assignedAgentId;
+
     @Column(nullable = false)
     private String subject;
 
