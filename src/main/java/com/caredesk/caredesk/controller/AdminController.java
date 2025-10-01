@@ -31,7 +31,7 @@ public class AdminController {
 
     // Assign Tickets to Agents
     @PostMapping("/assignTicket")
-    public ResponseEntity<Ticket> assignTicket(@RequestParam Long ticketId, @RequestParam Long adminId) {
+    public ResponseEntity<Ticket> assignTicket(@RequestParam Long ticketId, @RequestParam Long agentId) {
         Optional<Ticket> ticketOpt = ticketRepository.findById(ticketId);
         return ticketOpt.map(ticket -> {
             ticket.setAssignedAdminId(adminId); // Assume this field exists in Ticket
