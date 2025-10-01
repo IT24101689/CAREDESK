@@ -1,7 +1,14 @@
 package com.caredesk.caredesk.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import com.caredesk.caredesk.model.Admin;
+import com.caredesk.caredesk.model.Ticket;
+import com.caredesk.caredesk.model.Agent;
+import com.caredesk.caredesk.repository.AdminRepository;
+import com.caredesk.caredesk.repository.TicketRepository;
+import com.caredesk.caredesk.repository.AgentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class AdminController {
