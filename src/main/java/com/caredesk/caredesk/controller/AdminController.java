@@ -6,8 +6,52 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class AdminController {
 
-    @GetMapping("/admin/dashboard")
-    public String showDashboard() {
-        return "redirect:/admin/articles";  // Redirect dashboard to articles list
+    @Autowired
+    private AdminRepository adminRepository;
+
+    @Autowired
+    private TicketRepository ticketRepository;
+
+    // Manage User (Update/Remove)
+    @PostMapping("/manageUser")
+    public ResponseEntity<Admin> manageUser(@RequestBody Admin admin) {
+        Admin savedAdmin = adminRepository.save(admin);
+        return ResponseEntity.ok(savedAdmin);
+    }
+
+    // Assign Roles
+    @PostMapping("/assignRole")
+    public ResponseEntity<Admin> assignRole(@RequestParam Long adminId, @RequestParam String role) {
+        Optional<Admin> adminOpt = adminRepository.findById(adminId);
+        return adminOpt.map(admin -> {
+            admin.setRole(role);
+            return ResponseEntity.ok(adminRepository.save(admin));
+        }).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    // Assign Tickets to Agents
+    @PostMapping("/assignTicket")
+    public ResponseEntity<Ticket> assignTicket(@RequestParam Long ticketId, @RequestParam Long adminId) {
+        Optional<Ticket> ticketOpt = ticketRepository.findById(ticketId);
+        return ticketOpt.map(ticket -> {
+            ticket.setAssignedAdminId(adminId); // Assume this field exists in Ticket
+            return ResponseEntity.ok(ticketRepository.save(ticket));
+        }).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    // Update Customer DB (Placeholder for integration with CustomerController)
+    @PostMapping("/updateCustomerDB")
+    public ResponseEntity<String> updateCustomerDB(@RequestParam Long adminId) {
+        Optional<Admin> adminOpt = adminRepository.findById(adminId);
+        return adminOpt.map(admin -> {
+            // Logic to update customer database, potentially calling CustomerController
+            return ResponseEntity.ok("Customer DB updated by Admin ID: " + adminId);
+        }).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    // Get all admins
+    @GetMapping("/all")
+    public ResponseEntity<List<Admin>> getAllAdmins() {
+        return ResponseEntity.ok(adminRepository.findAll());
     }
 }
