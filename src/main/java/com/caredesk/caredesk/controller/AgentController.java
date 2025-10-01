@@ -22,3 +22,14 @@ public class AgentController {
         List<Ticket> tickets = ticketRepository.findByAgent_Id(agentId);
         return ResponseEntity.ok(tickets);
     }
+
+    // Update ticket status
+    @PostMapping("/updateTicketStatus")
+    public ResponseEntity<Ticket> updateTicketStatus(@RequestParam Long ticketId, @RequestParam String status) {
+        Optional<Ticket> ticketOpt = ticketRepository.findById(ticketId);
+        return ticketOpt.map(ticket -> {
+            ticket.setStatus(status); // Validate status (e.g., OPEN, IN_PROGRESS, CLOSED) if needed
+            return ResponseEntity.ok(ticketRepository.save(ticket));
+        }).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+}
