@@ -36,4 +36,8 @@ public class Ticket {
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;  // Link to user
+
+    @ManyToOne
+    @JoinColumn(name = "admin_id") // Optional: Tracks admin oversight
+    private Admin admin; // Link to admin for management
 }
