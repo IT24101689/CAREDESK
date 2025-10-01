@@ -23,6 +23,9 @@ public class AdminController {
     @Autowired
     private TicketRepository ticketRepository;
 
+    @Autowired
+    private AgentRepository agentRepository;
+
     // Manage User (Update/Remove)
     @PostMapping("/manageUser")
     public ResponseEntity<Admin> manageUser(@RequestBody Admin admin) {
