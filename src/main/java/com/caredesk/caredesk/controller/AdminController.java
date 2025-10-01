@@ -47,10 +47,9 @@ public class AdminController {
     @PostMapping("/assignTicket")
     public ResponseEntity<Ticket> assignTicket(@RequestParam Long ticketId, @RequestParam Long agentId) {
         Optional<Ticket> ticketOpt = ticketRepository.findById(ticketId);
-        Optional<Admin> adminOpt = adminRepository.findById(agentId); // Assuming agentId is an admin ID for now
-        return ticketOpt.flatMap(ticket -> adminOpt.map(admin -> {
-            ticket.setAssignedAgentId(agentId); // Assign to agent
-            ticket.setAdmin(admin); // Optional: Track admin oversight
+        Optional<Agent> agentOpt = agentRepository.findById(agentId); // Uses Agent class
+        return ticketOpt.flatMap(ticket -> agentOpt.map(agent -> {
+            ticket.setAgent(agent);
             return ResponseEntity.ok(ticketRepository.save(ticket));
         })).orElseGet(() -> ResponseEntity.notFound().build());
     }
