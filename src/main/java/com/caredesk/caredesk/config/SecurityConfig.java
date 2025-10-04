@@ -36,8 +36,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/faq", "/faq/**").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN") // Restrict admin paths to ADMIN role
-                        .requestMatchers("/agent/**").hasRole("AGENT") // Restrict agent paths to AGENT role (if implemented)
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/agent/**").hasRole("AGENT")
                         .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
