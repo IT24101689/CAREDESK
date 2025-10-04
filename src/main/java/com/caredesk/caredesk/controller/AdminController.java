@@ -72,7 +72,20 @@ public class AdminController {
 
     // Add Agent
     @PostMapping("/addAgent")
-    public ResponseEntity<Agent> addAgent(@RequestBody Agent agent) {
+    public ResponseEntity<Agent> addAgent(
+            @RequestParam String username,
+            @RequestParam String password,
+            @RequestParam String email,
+            @RequestParam String firstName,
+            @RequestParam String lastName,
+            @RequestParam(required = false) String phoneNumber) {
+        Agent agent = new Agent();
+        agent.setUsername(username);
+        agent.setPassword(password); // Encode in production
+        agent.setEmail(email);
+        agent.setFirstName(firstName);
+        agent.setLastName(lastName);
+        agent.setPhoneNumber(phoneNumber);
         return ResponseEntity.ok(agentRepository.save(agent));
     }
 
