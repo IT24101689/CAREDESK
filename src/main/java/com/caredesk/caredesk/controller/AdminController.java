@@ -91,10 +91,22 @@ public class AdminController {
 
     // Update Agent
     @PostMapping("/updateAgent")
-    public ResponseEntity<Agent> updateAgent(@RequestBody Agent agent) {
-        Optional<Agent> existingAgent = agentRepository.findById(agent.getId());
-        return existingAgent.map(a -> ResponseEntity.ok(agentRepository.save(agent)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<Agent> updateAgent(
+            @RequestParam Long id,
+            @RequestParam String username,
+            @RequestParam String email,
+            @RequestParam String firstName,
+            @RequestParam String lastName,
+            @RequestParam(required = false) String phoneNumber) {
+        Optional<Agent> existingAgent = agentRepository.findById(id);
+        return existingAgent.map(agent -> {
+            agent.setUsername(username);
+            agent.setEmail(email);
+            agent.setFirstName(firstName);
+            agent.setLastName(lastName);
+            agent.setPhoneNumber(phoneNumber);
+            return ResponseEntity.ok(agentRepository.save(agent));
+        }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // Remove Agent
