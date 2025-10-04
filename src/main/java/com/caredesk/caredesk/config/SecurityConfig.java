@@ -32,7 +32,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .securityMatcher("/admin/**", "/agent/**", "/faq/**", "/css/**", "/js/**", "/images/**", "/webjars/**", "/**")
-                .csrf(csrf -> csrf.disable()) // Disable CSRF for simplicity (enable in production with proper tokens)
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/faq", "/faq/**").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
