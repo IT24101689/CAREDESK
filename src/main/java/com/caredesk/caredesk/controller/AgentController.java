@@ -27,7 +27,10 @@ public class AgentController {
         // For now, assume agentId is 1 (replace with actual user ID from Principal in production)
         Long agentId = 1L; // Default for testing
         List<Ticket> tickets = ticketRepository.findByAgent_Id(agentId);
-        return ResponseEntity.ok(tickets);
+        model.addAttribute("tickets", tickets);
+        model.addAttribute("agentId", agentId);
+        model.addAttribute("agentUsername", principal.getName()); // Display logged-in username
+        return "agentDashboard"; // Thymeleaf template name
     }
 
     // Update ticket status
