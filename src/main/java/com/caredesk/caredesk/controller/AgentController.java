@@ -34,12 +34,12 @@ public class AgentController {
     }
 
     // Update ticket status
-    @PostMapping("/updateTicketStatus")
-    public ResponseEntity<Ticket> updateTicketStatus(@RequestParam Long ticketId, @RequestParam String status) {
-        Optional<Ticket> ticketOpt = ticketRepository.findById(ticketId);
-        return ticketOpt.map(ticket -> {
-            ticket.setStatus(status); // Validate status (e.g., OPEN, IN_PROGRESS, CLOSED) if needed
-            return ResponseEntity.ok(ticketRepository.save(ticket));
-        }).orElseGet(() -> ResponseEntity.notFound().build());
+    @PostMapping("/updateTicket")
+    public String updateTicketStatus(@RequestParam Long ticketId, @RequestParam String status, @RequestParam Long agentId, Model model) {
+        ticketRepository.findById(ticketId).ifPresent(ticket -> {
+            ticket.setStatus(status);
+            ticketRepository.save(ticket);
+        });
+        return "redirect:/agent?agentId=" + agentId; // Redirect to dashboard
     }
 }
