@@ -42,7 +42,7 @@ public class SecurityConfig {
                 )
                 .formLogin(form -> form
                         .loginPage("/admin/login")
-                        .defaultSuccessUrl("/admin/dashboard", true)
+                        .defaultSuccessUrl("/agent", true) // Default to agent dashboard for agents
                         .permitAll()
                 )
                 .logout(logout -> logout
