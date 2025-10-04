@@ -18,9 +18,14 @@ public class AgentController {
     @Autowired
     private TicketRepository ticketRepository;
 
-    // View all tickets assigned to the agent
-    @GetMapping("/tickets")
-    public ResponseEntity<List<Ticket>> getAssignedTickets(@RequestParam Long agentId) {
+    // Display agent dashboard with assigned tickets
+    @GetMapping
+    public String agentDashboard(Model model, Principal principal) {
+        if (principal == null) {
+            return "redirect:/admin/login"; // Redirect to login if not authenticated
+        }
+        // For now, assume agentId is 1 (replace with actual user ID from Principal in production)
+        Long agentId = 1L; // Default for testing
         List<Ticket> tickets = ticketRepository.findByAgent_Id(agentId);
         return ResponseEntity.ok(tickets);
     }
