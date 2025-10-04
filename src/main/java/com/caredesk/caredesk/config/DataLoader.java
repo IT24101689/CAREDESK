@@ -2,6 +2,8 @@ package com.caredesk.caredesk.config;
 
 import com.caredesk.caredesk.model.Admin;
 import com.caredesk.caredesk.model.Customer;
+import com.caredesk.caredesk.model.Agent;
+import com.caredesk.caredesk.repository.AgentRepository;
 import com.caredesk.caredesk.repository.AdminRepository;
 import com.caredesk.caredesk.repository.CustomerRepository;
 import com.caredesk.caredesk.service.CustomerService;
