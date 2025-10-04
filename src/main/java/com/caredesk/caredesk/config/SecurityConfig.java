@@ -31,8 +31,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .securityMatcher("/admin/**", "/faq/**", "/css/**", "/js/**", "/images/**", "/webjars/**", "/**") // Explicitly match all other paths
-                .csrf(csrf -> csrf.disable())
+                .securityMatcher("/admin/**", "/agent/**", "/faq/**", "/css/**", "/js/**", "/images/**", "/webjars/**", "/**")
+                .csrf(csrf -> csrf.disable()) // Disable CSRF for simplicity (enable in production with proper tokens)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/faq", "/faq/**").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
