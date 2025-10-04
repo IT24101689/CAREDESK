@@ -69,4 +69,28 @@ public class AdminController {
     public ResponseEntity<List<Admin>> getAllAdmins() {
         return ResponseEntity.ok(adminRepository.findAll());
     }
+
+    // Add Agent
+    @PostMapping("/addAgent")
+    public ResponseEntity<Agent> addAgent(@RequestBody Agent agent) {
+        return ResponseEntity.ok(agentRepository.save(agent));
+    }
+
+    // Update Agent
+    @PostMapping("/updateAgent")
+    public ResponseEntity<Agent> updateAgent(@RequestBody Agent agent) {
+        Optional<Agent> existingAgent = agentRepository.findById(agent.getId());
+        return existingAgent.map(a -> ResponseEntity.ok(agentRepository.save(agent)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    // Remove Agent
+    @DeleteMapping("/removeAgent/{id}")
+    public ResponseEntity<Void> removeAgent(@PathVariable Long id) {
+        if (agentRepository.existsById(id)) {
+            agentRepository.deleteById(id);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
 }
