@@ -50,4 +50,26 @@ public class DataLoader implements CommandLineRunner {
             System.out.println("Default customer created: email=john@example.com, password=123 (plain)");
         }
     }
+
+    //@Override
+   // public void run(String... args) throws Exception {
+       // if (agentRepository.count() == 0) {
+           // Agent agent1 = new Agent();
+           // agent1.setUsername("agent1");
+           // agent1.setPassword("agentpass123"); // Hash in production
+            //agent1.setEmail("agent1@caredesk.com");
+            //agent1.setFirstName("John");
+            //agent1.setLastName("Doe");
+            //agent1.setPhoneNumber("123-456-7890");
+            //agentRepository.save(agent1);
+
+            //Agent agent2 = new Agent();
+            //agent2.setUsername("agent2");
+            //agent2.setPassword("agentpass456");
+           // agent2.setEmail("agent2@caredesk.com");
+           // agent2.setFirstName("Jane");
+           // agent2.setLastName("Smith");
+           // agent2.setPhoneNumber("987-654-3210");
+           // agentRepository.save(agent2);
+
 }
