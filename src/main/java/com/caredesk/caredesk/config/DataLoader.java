@@ -41,6 +41,31 @@ public class DataLoader implements CommandLineRunner {
             System.out.println("Default admin created: username=admin, password=123 (plain)");
         }
 
+        // Seed Agents
+        if (agentRepository.count() == 0) {
+            Agent agent1 = new Agent();
+            agent1.setUsername("agent1");
+            agent1.setPassword(passwordEncoder.encode("agentpass123")); // Encode password
+            agent1.setEmail("agent1@caredesk.com");
+            agent1.setFirstName("John");
+            agent1.setLastName("Doe");
+            agent1.setPhoneNumber("123-456-7890");
+            agent1.setRole("AGENT"); // Assuming role is a field
+            agentRepository.save(agent1);
+
+            Agent agent2 = new Agent();
+            agent2.setUsername("agent2");
+            agent2.setPassword(passwordEncoder.encode("agentpass456")); // Encode password
+            agent2.setEmail("agent2@caredesk.com");
+            agent2.setFirstName("Jane");
+            agent2.setLastName("Smith");
+            agent2.setPhoneNumber("987-654-3210");
+            agent2.setRole("AGENT");
+            agentRepository.save(agent2);
+            System.out.println("Default agents created: agent1 (agentpass123), agent2 (agentpass456) (encoded)");
+        }
+
+        // Seed Customer
         if (customerRepository.count() == 0) {
             Customer customer = new Customer();
             customer.setName("John Doe");
