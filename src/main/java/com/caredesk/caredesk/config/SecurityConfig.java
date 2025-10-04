@@ -17,6 +17,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig {
 
     @Bean
+    public UserDetailsService userDetailsService() {
+        // Placeholder: Implement to load Admin or Agent details
+        // Example: return new CustomUserDetailsService(adminRepository, agentRepository);
+        return username -> null; // To be replaced with actual implementation
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(); // Secure password encoding
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .securityMatcher("/admin/**", "/faq/**", "/css/**", "/js/**", "/images/**", "/webjars/**", "/**") // Explicitly match all other paths
