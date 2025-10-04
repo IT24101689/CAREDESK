@@ -43,7 +43,7 @@ public class AdminController {
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Assign Tickets to Agents
+    // Assign Ticket to Agent
     @PostMapping("/assignTicket")
     public ResponseEntity<Ticket> assignTicket(@RequestParam Long ticketId, @RequestParam Long agentId) {
         Optional<Ticket> ticketOpt = ticketRepository.findById(ticketId);
