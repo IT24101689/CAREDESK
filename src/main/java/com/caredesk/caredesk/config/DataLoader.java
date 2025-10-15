@@ -4,7 +4,6 @@ import com.caredesk.caredesk.model.Admin;
 import com.caredesk.caredesk.model.Customer;
 import com.caredesk.caredesk.repository.AdminRepository;
 import com.caredesk.caredesk.repository.CustomerRepository;
-import com.caredesk.caredesk.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,24 +18,21 @@ public class DataLoader implements CommandLineRunner {
     @Autowired
     private CustomerRepository customerRepository;
 
+    // This is now correctly used to encode passwords.
     @Autowired
-    private PasswordEncoder passwordEncoder;  // Not used now, but keep for future
-
-    @Autowired
-    private CustomerService customerService;
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) throws Exception {
-        // Optional: Clear existing data to force re-seed (comment out after first run)
-        // adminRepository.deleteAll();
-        // customerRepository.deleteAll();
-
         if (adminRepository.count() == 0) {
             Admin admin = new Admin();
             admin.setUsername("admin");
-            admin.setPassword("123");  // Plain text
+            // ✅ CORRECT: Encode the password before saving
+            admin.setPassword(passwordEncoder.encode("123"));
+            admin.setRole("ADMIN");
+            admin.setEmail("admin@example.com");
             adminRepository.save(admin);
-            System.out.println("Default admin created: username=admin, password=123 (plain)");
+            System.out.println("Default admin created with ENCODED password.");
         }
 
         if (customerRepository.count() == 0) {
@@ -45,9 +41,10 @@ public class DataLoader implements CommandLineRunner {
             customer.setAddress("123 Main St");
             customer.setMobileNo("1234567890");
             customer.setEmail("john@example.com");
-            customer.setPassword("123");  // Plain text
-            customerRepository.save(customer);  // Direct save, no encode
-            System.out.println("Default customer created: email=john@example.com, password=123 (plain)");
+            // ✅ CORRECT: Encode the password before saving
+            customer.setPassword(passwordEncoder.encode("123"));
+            customerRepository.save(customer);
+            System.out.println("Default customer created with ENCODED password.");
         }
     }
 }

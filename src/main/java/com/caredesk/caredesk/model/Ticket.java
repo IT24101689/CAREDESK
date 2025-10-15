@@ -13,21 +13,22 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // No changes to these fields
     private String title;
     private String description;
-    private Long assignedAgentId;
-
     @Column(nullable = false)
     private String subject;
-
     @Lob
     @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String content;
-
     @Column(nullable = false)
-    private String status = "OPEN";  // Default: OPEN, IN_PROGRESS, CLOSED
-
+    private String status = "OPEN";
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    // This properly links to the Agent entity for assignments.
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "assigned_agent_id") // Matches your database screenshot
+    private Agent assignedAgent;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
