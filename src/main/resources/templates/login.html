@@ -2,114 +2,315 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - CareDesk</title>
     <link rel="icon" type="image/png" th:href="@{/CareDeskLog.png}" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- Reuse styles from admin_login.html for consistency -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <style>
-        /* Paste styles from admin_login.html here (login-card, btn, etc.) */
-        html, body {
-            margin: 0;
-            height: 100%;
-            font-family: 'Inter', Arial, sans-serif;
-            background: url('https://images.unsplash.com/photo-1581091870622-df5f2ed3fc35?auto=format&fit=crop&w=1470&q=80') no-repeat center center;
-            background-size: cover;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #111827;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-600: #4b5563;
+            --gray-800: #1f2937;
+            --glass: rgba(255, 255, 255, 0.85);
+            --glass-darker: rgba(255, 255, 255, 0.95);
+            --border-radius: 12px;
+            --transition: all 0.25s ease;
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(245,245,247,0.35);
-            z-index: 0;
+        html, body {
+            font-family: 'Inter', sans-serif;
+            background: lightcoral;
+            min-height: 100vh;
+            color: var(--dark);
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: var(--glass);
+            backdrop-filter: blur(8px);
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .navbar-brand {
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 1.25rem;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
         }
 
         .login-card {
-            position: relative;
-            z-index: 1;
-            background: rgba(255,255,255,0.85);
-            border-radius: 16px;
-            padding: 3rem 2.5rem;
-            box-shadow: 0 24px 40px rgba(0,0,0,0.06);
-            backdrop-filter: blur(6px);
+            background: var(--glass);
+            border-radius: var(--border-radius);
+            padding: 3rem;
             width: 100%;
-            max-width: 400px;
+            max-width: 480px; /* <-- Increased size */
+            box-shadow: var(--shadow-md);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--gray-200);
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .login-header {
             text-align: center;
+            margin-bottom: 2rem;
         }
 
-        h2 {
-            font-weight: 700;
+        .login-header img {
+            width: 80px;
+            height: 80px;
             margin-bottom: 1.5rem;
-            color: #111827;
+            animation: bounce 2s ease infinite;
         }
 
-        .form-label {
-            font-weight: 600;
-            color: #374151;
-        }
-
-        .form-control {
-            border-radius: 12px;
-            border: 1px solid #d1d5db;
-            padding: 0.6rem 0.75rem;
-            margin-bottom: 1rem;
-        }
-
-        .btn {
-            border-radius: 9999px;
-            font-weight: 600;
-            padding: 0.65rem 1.5rem;
-            transition: all 0.25s ease;
+        .login-title {
+            font-weight: 700;
+            font-size: 1.75rem;
+            color: var(--dark);
             margin-bottom: 0.5rem;
         }
 
+        .login-subtitle {
+            color: var(--gray-600);
+            font-size: 1rem;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--gray-800);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .form-control {
+            border: 1px solid var(--gray-200);
+            border-radius: var(--border-radius);
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: var(--glass-darker);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        /* --- UPDATED CSS --- */
+        .input-group .form-control {
+            /* Adds new padding on the left to make space for the icon */
+            padding-left: 2.75rem;
+        }
+
+        .input-group .bi {
+            position: absolute;
+            left: 1rem;  /* <-- MOVED from right to left */
+            top: 2.75rem;
+            transform: translateY(-50%);
+            color: var(--gray-600);
+            font-size: 1.1rem;
+            z-index: 3; /* <-- Ensures icon is on top */
+        }
+        /* --- END OF UPDATED CSS --- */
+
+
+        .btn {
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
         .btn-primary {
-            background-color: #111827;
-            color: #fff;
-            width: 100%;
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: white;
         }
 
         .btn-primary:hover {
-            background-color: #1f2937;
+            background-color: var(--primary-hover);
+            border-color: var(--primary-hover);
             transform: translateY(-2px);
         }
 
+        .btn-secondary {
+            background-color: var(--gray-100);
+            border: 1px solid var(--gray-200);
+            color: var(--dark);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--gray-200);
+            transform: translateY(-2px);
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
         .alert {
-            border-radius: 12px;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .alert-danger {
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+        }
+
+        .alert-success {
+            background-color: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .nav-buttons .btn {
+            flex: 1;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-6px);
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="login-card">
-    <h2>Login</h2>
-
-    <!-- Spring Security error handling -->
-    <div th:if="${param.error}" class="alert alert-danger">Invalid username or password.</div>
-    <div th:if="${param.logout}" class="alert alert-success">You have been logged out.</div>
-
-    <form method="post" th:action="@{/login}">
-        <div class="text-start mb-3">
-            <label for="username" class="form-label">Username/Email</label>
-            <input type="text" id="username" name="username" class="form-control" placeholder="Enter username or email" required />
+<nav class="navbar navbar-expand-lg navbar-light sticky-top">
+    <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center" href="/">
+            <img th:src="@{/CareDeskLog.png}" alt="CareDesk Logo" height="30" class="me-2">
+            CareDesk
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/faq">FAQ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/login">Login</a>
+                </li>
+            </ul>
         </div>
-        <div class="text-start mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" id="password" name="password" class="form-control" placeholder="Enter password" required />
-        </div>
-        <button type="submit" class="btn btn-primary">Sign In</button>
-    </form>
+    </div>
+</nav>
 
-    <a href="/faq" class="btn btn-primary mt-3">Go to FAQ Page</a>
-    <a href="/" class="btn btn-primary mt-2">Back</a>
+<div class="main-content">
+    <div class="login-card">
+        <div class="login-header">
+            <img th:src="@{/CareDeskLog.png}" alt="CareDesk Logo" class="mb-4">
+            <h1 class="login-title">Welcome Back</h1>
+            <p class="login-subtitle">Sign in to access your dashboard</p>
+        </div>
+
+        <div th:if="${param.error}" class="alert alert-danger">
+            <i class="bi bi-exclamation-circle"></i>
+            Invalid username or password.
+        </div>
+        <div th:if="${param.logout}" class="alert alert-success">
+            <i class="bi bi-check-circle"></i>
+            You have been logged out successfully.
+        </div>
+
+        <form method="post" th:action="@{/login}">
+            <div class="input-group">
+                <label for="username" class="form-label">Username/Email</label>
+                <input type="text" id="username" name="username" class="form-control"
+                       placeholder="Enter your username or email" required>
+                <i class="bi bi-person"></i>
+            </div>
+            <div class="input-group">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" id="password" name="password" class="form-control"
+                       placeholder="Enter your password" required>
+                <i class="bi bi-lock"></i>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">
+                <i class="bi bi-box-arrow-in-right"></i>
+                Sign In
+            </button>
+        </form>
+
+        <div class="nav-buttons">
+            <a href="/faq" class="btn btn-secondary">
+                <i class="bi bi-question-circle"></i>
+                FAQ
+            </a>
+            <a href="/" class="btn btn-secondary">
+                <i class="bi bi-house"></i>
+                Home
+            </a>
+        </div>
+    </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

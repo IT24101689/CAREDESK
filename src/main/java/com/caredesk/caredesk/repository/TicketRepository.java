@@ -10,6 +10,11 @@ import java.util.List;
 @Repository
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
     List<Ticket> findByCustomerId(Long customerId);
+    void deleteByCustomerId(Long customerId);
     List<Ticket> findByAssignedAgent(Agent agent);
     //List<Ticket> findByAgent_Id(Long agentId); // For user's tickets
+    // --- ADD THIS METHOD ---
+    // This query finds all tickets where the 'assignedAgent' field is null
+    List<Ticket> findByAssignedAgentIsNull();
+
 }

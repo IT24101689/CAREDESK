@@ -8,6 +8,9 @@ public interface TicketService {
 
     List<Ticket> findByCustomerId(Long customerId);
 
+
+    List<Ticket> findUnassignedTickets();
+
     Ticket findById(Long id);
 
     Ticket save(Ticket ticket);

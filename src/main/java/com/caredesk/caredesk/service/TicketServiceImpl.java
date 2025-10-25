@@ -4,7 +4,6 @@ import com.caredesk.caredesk.model.Ticket;
 import com.caredesk.caredesk.repository.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.caredesk.caredesk.service.TicketService;
 
 import java.util.List;
 
@@ -32,5 +31,12 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public void deleteById(Long id) {
         ticketRepository.deleteById(id);
+    }
+
+    // --- THIS IS THE MISSING METHOD ---
+    // You must add this method to match the TicketService interface
+    @Override
+    public List<Ticket> findUnassignedTickets() {
+        return ticketRepository.findByAssignedAgentIsNull();
     }
 }

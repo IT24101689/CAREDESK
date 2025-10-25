@@ -1,88 +1,244 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title th:text="${article.title}">Article</title>
-  <link rel="icon" type="image/png" th:href="@{/CareDeskLog.png}" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Inter', Arial, sans-serif;
-      background: url('https://images.unsplash.com/photo-1581091870622-df5f2ed3fc35?auto=format&fit=crop&w=1470&q=80') no-repeat center center;
-      background-size: cover;
-      min-height: 100vh;
-      position: relative;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${article.title}">Article</title>
+    <link rel="icon" type="image/png" th:href="@{/CareDeskLog.png}" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #111827;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-600: #4b5563;
+            --gray-800: #1f2937;
+            --glass: rgba(255, 255, 255, 0.85);
+            --glass-darker: rgba(255, 255, 255, 0.95);
+            --border-radius: 12px;
+            --transition: all 0.25s ease;
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
 
-    body::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(245,245,247,0.35);
-      z-index: 0;
-    }
+        html, body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Inter', system-ui, sans-serif;
+            background: linear-gradient(rgba(243, 244, 246, 0.7), rgba(243, 244, 246, 0.7)), url('https://images.unsplash.com/photo-1581091870622-df5f2ed3fc35?auto=format&fit=crop&w=1470&q=80') no-repeat center center;
+            background-size: cover;
+            background-attachment: fixed;
+        }
 
-    .article-container {
-      position: relative;
-      z-index: 1;
-      background: rgba(255,255,255,0.95);
-      border-radius: 16px;
-      padding: 3rem 2.5rem;
-      max-width: 1000px;
-      margin: 4rem auto;
-      box-shadow: 0 24px 40px rgba(0,0,0,0.06);
-      backdrop-filter: blur(6px);
-    }
+        .navbar {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            z-index: 1030;
+        }
 
-    h2 {
-      font-weight: 700;
-      margin-bottom: 1rem;
-      color: #111827;
-    }
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
 
-    .article-meta {
-      color: #6b7280;
-      margin-bottom: 1.5rem;
-    }
+        .nav-link {
+            font-weight: 500;
+            color: var(--dark);
+            position: relative;
+            transition: var(--transition);
+        }
 
-    .article-content {
-      color: #374151;
-      white-space: pre-wrap;  /* ✅ preserves line breaks */
-      line-height: 1.6;
-      font-size: 1rem;
-    }
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary);
+        }
 
-    .btn-back {
-      display: inline-block;
-      border-radius: 9999px;
-      padding: 0.65rem 1.5rem;
-      font-weight: 600;
-      background-color: #111827;
-      color: #fff;
-      text-decoration: none;
-      transition: all 0.25s ease;
-      margin-top: 2rem;
-    }
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            height: 3px;
+            width: 100%;
+            background: var(--primary);
+            border-radius: 3px;
+        }
 
-    .btn-back:hover {
-      background-color: #1f2937;
-      transform: translateY(-2px);
-    }
-  </style>
+        .main-container {
+            padding: 2rem 1rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .article-container {
+            background: var(--glass);
+            border-radius: var(--border-radius);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+            backdrop-filter: blur(10px);
+        }
+
+        .article-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .article-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: var(--gray-600);
+            font-size: 0.95rem;
+        }
+
+        .article-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .article-meta i {
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .article-content {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            color: var(--gray-800);
+            line-height: 1.7;
+            font-size: 1.05rem;
+            white-space: pre-wrap;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .btn-back {
+            color: var(--primary);
+            background-color: white;
+            border: 1px solid var(--primary);
+        }
+
+        .btn-back:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 1rem;
+            }
+
+            .article-container {
+                padding: 1.5rem;
+            }
+
+            .article-title {
+                font-size: 1.75rem;
+            }
+
+            .article-content {
+                padding: 1.5rem;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body>
-<div class="article-container">
-  <h2 th:text="${article.title}"></h2>
-  <div class="article-meta" th:text="'Category: ' + ${article.category.name}"></div>
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg sticky-top mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="bi bi-headset me-2"></i>CareDesk
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <i class="bi bi-list"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">
+                        <i class="bi bi-house-door me-1"></i>Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/faq">
+                        <i class="bi bi-question-circle me-1"></i>FAQ
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/customer/tickets">
+                        <i class="bi bi-ticket-detailed me-1"></i>My Tickets
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
-  <!-- Display full content safely -->
-  <div class="article-content" th:text="${article.content}"></div>
+<div class="main-container animate__animated animate__fadeIn">
+    <div class="article-container fade-in">
+        <!-- Article Header -->
+        <div class="article-header">
+            <h1 class="article-title" th:text="${article.title}"></h1>
+            <div class="article-meta">
+                <div class="article-meta-item">
+                    <i class="bi bi-folder"></i>
+                    <span th:text="${article.category.name}"></span>
+                </div>
+            </div>
+        </div>
 
-  <!-- Back button -->
-  <a href="/faq" class="btn-back">← Back to FAQ</a>
+        <!-- Article Content -->
+        <div class="article-content" th:text="${article.content}"></div>
+
+        <!-- Back button -->
+        <a href="/faq" class="btn btn-back">
+            <i class="bi bi-arrow-left"></i>
+            Back to FAQ
+        </a>
+    </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

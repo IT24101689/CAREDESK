@@ -1,191 +1,514 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Admin Dashboard - CareDesk</title>
-  <link rel="icon" type="image/png" th:href="@{/CareDeskLog.png}" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    html, body {
-      margin: 0;
-      height: 100%;
-      font-family: 'Inter', Arial, sans-serif;
-      background: url('https://images.unsplash.com/photo-1581091870622-df5f2ed3fc35?auto=format&fit=crop&w=1470&q=80') no-repeat center center;
-      background-size: cover;
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      padding-top: 50px;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - CareDesk</title>
+    <link rel="icon" type="image/png" th:href="@{/CareDeskLog.png}" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #111827;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-800: #1f2937;
+            --glass: rgba(255, 255, 255, 0.85);
+            --glass-darker: rgba(255, 255, 255, 0.95);
+            --border-radius: 12px;
+            --transition: all 0.25s ease;
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
 
-    body::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(245,245,247,0.35);
-      z-index: 0;
-    }
+        html, body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Inter', system-ui, sans-serif;
+            background: linear-gradient(rgba(243, 244, 246, 0.7), rgba(243, 244, 246, 0.7)), url('https://images.unsplash.com/photo-1581091870622-df5f2ed3fc35?auto=format&fit=crop&w=1470&q=80') no-repeat center center;
+            background-size: cover;
+            background-attachment: fixed;
+        }
 
-    .dashboard-card {
-      position: relative;
-      z-index: 1;
-      background: rgba(255,255,255,0.85);
-      border-radius: 16px;
-      padding: 4rem 4rem;
-      box-shadow: 0 24px 40px rgba(0,0,0,0.06);
-      backdrop-filter: blur(6px);
-      width: 100%;
-      max-width: 1200px;
-      display: flex;
-      flex-direction: column;
-    }
+        .navbar {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            z-index: 1030;
+        }
 
-    h1 {
-      font-weight: 700;
-      margin-bottom: 1.5rem;
-      color: #111827;
-      text-align: center;
-    }
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
 
-    .btn {
-      border-radius: 9999px;
-      font-weight: 600;
-      padding: 0.65rem 1.5rem;
-      transition: all 0.25s ease;
-      margin-bottom: 0.5rem;
-    }
+        .nav-link {
+            font-weight: 500;
+            color: var(--dark);
+            position: relative;
+            transition: var(--transition);
+        }
 
-    .btn-primary {
-      background-color: #111827;
-      color: #fff;
-      border: none;
-    }
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary);
+        }
 
-    .btn-primary:hover {
-      background-color: #1f2937;
-      transform: translateY(-2px);
-    }
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            height: 3px;
+            width: 100%;
+            background: var(--primary);
+            border-radius: 3px;
+        }
 
-    .btn-landing {
-      background-color: #111827;
-      color: #fff;
-      border: none;
-      width: 100%;
-      border-radius: 9999px;
-      padding: 0.65rem 1.5rem;
-      font-weight: 600;
-      transition: all 0.25s ease;
-      text-decoration: none;
-    }
+        .main-container {
+            padding: 2rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-    .btn-landing:hover {
-      background-color: #1f2937;
-      transform: translateY(-2px);
-      color: #fff;
-    }
+        .dashboard-card {
+            background: var(--glass);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            backdrop-filter: blur(10px);
+            margin-bottom: 2rem;
+        }
 
-    .table-container {
-      background: rgba(255,255,255,0.95);
-      border-radius: 16px;
-      box-shadow: 0 12px 24px rgba(0,0,0,0.06);
-      overflow: hidden;
-      margin-top: 1rem;
-      display: flex;
-      flex-direction: column;
-    }
+        .dashboard-title {
+            font-weight: 700;
+            font-size: 2rem;
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
 
-    .table-wrapper {
-      max-height: 400px; /* adjust scrollable height */
-      overflow-y: auto;
-    }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
 
-    table {
-      width: 100%;
-      border-collapse: separate;
-      border-spacing: 0;
-    }
+        .stat-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            text-align: center;
+            transition: var(--transition);
+        }
 
-    thead th {
-      background-color: rgba(243,244,246,0.8);
-      color: #111827;
-      font-weight: 600;
-      padding: 0.75rem;
-      text-align: left;
-      position: sticky;
-      top: 0;
-      z-index: 1;
-    }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
 
-    tbody td {
-      padding: 0.75rem;
-      vertical-align: middle;
-    }
+        .stat-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
 
-    tbody tr:hover {
-      background-color: rgba(229,231,235,0.5);
-      cursor: pointer;
-    }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
 
-    .action-btn {
-      margin-right: 0.5rem;
-      margin-bottom: 0.25rem;
-      width: auto;
-      padding: 0.45rem 1rem;
-      font-size: 0.875rem;
-    }
+        .stat-label {
+            color: var(--gray-800);
+            font-weight: 500;
+        }
 
-  </style>
+        /* Added alert styles */
+        .alert {
+            border-radius: var(--border-radius);
+            border-width: 0;
+        }
+        .alert-success {
+            background-color: var(--success);
+            color: white;
+            font-weight: 500;
+        }
+        .alert-danger {
+            background-color: var(--danger);
+            color: white;
+            font-weight: 500;
+        }
+
+        .btn {
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            transition: var(--transition);
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            border-color: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .action-btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        .action-btn.btn-delete {
+            background-color: var(--danger);
+            border-color: var(--danger);
+        }
+
+        .action-btn.btn-delete:hover {
+            background-color: #dc2626;
+            border-color: #dc2626;
+        }
+
+        .table-container {
+            background: var(--glass-darker);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            margin-top: 1.5rem;
+        }
+
+        .table-wrapper {
+            max-height: 500px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--gray-300) transparent;
+        }
+
+        .table-wrapper::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .table-wrapper::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .table-wrapper::-webkit-scrollbar-thumb {
+            background-color: var(--gray-300);
+            border-radius: 3px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        thead th {
+            background-color: var(--glass);
+            color: var(--dark);
+            font-weight: 600;
+            padding: 1rem;
+            text-align: left;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        tbody td {
+            padding: 1rem;
+            vertical-align: middle;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        /* Style for assignment form */
+        tbody td form {
+            min-width: 250px;
+            gap: 0.5rem;
+        }
+
+        .badge {
+            font-weight: 600;
+        }
+
+        tbody tr {
+            transition: var(--transition);
+        }
+
+        tbody tr:hover {
+            background-color: var(--gray-100);
+        }
+
+        .search-bar {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            transition: var(--transition);
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-800);
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 1rem;
+            }
+
+            .dashboard-card {
+                padding: 1.5rem 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .table-wrapper {
+                max-height: 400px;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body>
-
-<div class="dashboard-card">
-  <h1>Admin Dashboard</h1>
-
-  <!-- Menu Links -->
-    <div class="mb-3 text-center">
-        <a href="/admin/articles" class="btn btn-primary me-2">FAQ Articles</a>
-        <a href="/admin/agents" class="btn btn-primary me-2">Manage Agents</a>
-        <a href="/admin/categories" class="btn btn-primary">Categories</a>
+<nav class="navbar navbar-expand-lg sticky-top mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="/admin/dashboard">
+            <i class="bi bi-shield-lock me-2"></i>CareDesk Admin
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <i class="bi bi-list"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/admin/dashboard">
+                        <i class="bi bi-grid me-1"></i>Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/articles">
+                        <i class="bi bi-file-text me-1"></i>Articles
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/agents">
+                        <i class="bi bi-people me-1"></i>Agents
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/categories">
+                        <i class="bi bi-folder me-1"></i>Categories
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">
+                        <i class="bi bi-box-arrow-right me-1"></i>Logout
+                    </a>
+                </li>
+                <li class="nav-item">
+                    </a>
+                    <a href="/admin/notifications/new" class="btn btn-warning text-dark"> <i class="bi bi-send"></i> Send Notification
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
+</nav>
 
-    <!-- Existing Add New FAQ Article Button and Table (for articles) -->
+<div class="main-container animate__animated animate__fadeIn">
+    <div class="dashboard-card">
+        <h1 class="dashboard-title">
+            <i class="bi bi-speedometer2"></i>Dashboard Overview
+        </h1>
 
-  <!-- FAQ Articles Section -->
-  <h2>FAQ Articles</h2>
-  <a href="/admin/articles/new" class="btn btn-primary mb-3">Add New FAQ Article</a>
-  <!-- Existing table -->
+        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
 
-  <!-- Table -->
-  <div class="table-container">
-    <div class="table-wrapper">
-      <table class="table mb-0">
-        <thead>
-        <tr>
-          <th>Question</th>
-          <th>Category</th>
-          <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="article : ${articles}">
-          <td th:text="${article.title}"></td>
-          <td th:text="${article.category.name}"></td>
-          <td>
-            <a th:href="@{/admin/articles/edit/{id}(id=${article.id})}" class="btn btn-primary action-btn">Edit</a>
-            <a th:href="@{/admin/articles/delete/{id}(id=${article.id})}" class="btn btn-primary action-btn"
-               onclick="return confirm('Are you sure you want to delete this article?');">Delete</a>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+        <div class="stats-grid mt-4">
+            <div class="stat-card fade-in">
+                <i class="bi bi-file-text stat-icon"></i>
+                <div class="stat-value" th:text="${articles.size()}">0</div>
+                <div class="stat-label">FAQ Articles</div>
+            </div>
+            <div class="stat-card fade-in">
+                <i class="bi bi-ticket-perforated stat-icon" style="color: var(--warning)"></i>
+                <div class="stat-value" th:text="${unassignedTickets.size()}">0</div>
+                <div class="stat-label">Unassigned Tickets</div>
+            </div>
+            <div class="stat-card fade-in">
+                <i class="bi bi-people stat-icon" style="color: var(--success)"></i>
+                <div class="stat-value" th:text="${agents.size()}">0</div>
+                <div class="stat-label">Total Agents</div>
+            </div>
+        </div>
 
-  <!-- Logout Button -->
-    <a href="/logout" class="btn btn-primary mt-3">Logout</a>
-</div>
+        <div class="mt-5"> <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="h3 mb-0">FAQ Articles</h2>
+            <a href="/admin/articles/new" class="btn btn-primary">
+                <i class="bi bi-plus-lg"></i>Add New Article
+            </a>
+        </div>
 
+            <div class="search-bar">
+                <i class="bi bi-search"></i>
+                <input type="text" id="articleSearch" placeholder="Search articles..." class="form-control">
+            </div>
+
+            <div class="table-container">
+                <div class="table-wrapper">
+                    <table class="table mb-0" id="articleTable">
+                        <thead>
+                        <tr>
+                            <th>Question</th>
+                            <th>Category</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="article : ${articles}">
+                            <td th:text="${article.title}"></td>
+                            <td th:text="${article.category.name}"></td>
+                            <td>
+                                <a th:href="@{/admin/articles/edit/{id}(id=${article.id})}"
+                                   class="btn btn-primary action-btn me-2">
+                                    <i class="bi bi-pencil"></i> Edit
+                                </a>
+                                <a th:href="@{/admin/articles/delete/{id}(id=${article.id})}"
+                                   class="btn action-btn btn-delete"
+                                   onclick="return confirm('Are you sure you want to delete this article?');">
+                                    <i class="bi bi-trash"></i> Delete
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-5">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="h3 mb-0">Unassigned Tickets</h2>
+            </div>
+
+            <div class="table-container">
+                <div class="table-wrapper">
+                    <table class="table mb-0">
+                        <thead>
+                        <tr>
+                            <th>Ticket ID</th>
+                            <th>Subject</th>
+                            <th>Customer</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th>Assign to Agent</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="ticket : ${unassignedTickets}">
+                            <td th:text="${ticket.id}"></td>
+                            <td th:text="${ticket.subject}"></td>
+                            <td th:text="${ticket.customer.name}"></td>
+                            <td th:text="${ticket.category.name}"></td>
+                            <td>
+                                <span class="badge"
+                                      th:classappend="${ticket.status == 'OPEN'} ? 'bg-success' : 'bg-secondary'"
+                                      th:text="${ticket.status}"></span>
+                            </td>
+                            <td>
+                                <form th:action="@{/admin/tickets/assign}" method="post" class="d-flex">
+                                    <input type="hidden" name="ticketId" th:value="${ticket.id}" />
+                                    <select name="agentId" class="form-select form-select-sm me-2" required>
+                                        <option value="" disabled selected>Select an agent...</option>
+                                        <option th:each="agent : ${agents}"
+                                                th:value="${agent.id}"
+                                                th:text="${agent.name}"></option>
+                                    </select>
+                                    <button type="submit" class="btn btn-primary action-btn">Assign</button>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(unassignedTickets)}">
+                            <td colspan="6" class="text-center text-muted p-4">
+                                No unassigned tickets. Great job!
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div> </div> <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Simple search functionality
+    document.getElementById('articleSearch').addEventListener('keyup', function() {
+        const searchText = this.value.toLowerCase();
+        // Updated to be specific to the article table
+        const rows = document.querySelectorAll('#articleTable tbody tr');
+
+        rows.forEach(row => {
+            const title = row.cells[0].textContent.toLowerCase();
+            const category = row.cells[1].textContent.toLowerCase();
+            const match = title.includes(searchText) || category.includes(searchText);
+            row.style.display = match ? '' : 'none';
+        });
+    });
+</script>
 </body>
 </html>

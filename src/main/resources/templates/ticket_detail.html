@@ -1,87 +1,295 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Ticket Details</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Details - CareDesk</title>
     <link rel="icon" type="image/png" th:href="@{/CareDeskLog.png}" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Reuse styles from article_detail.html -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #111827;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-600: #4b5563;
+            --gray-800: #1f2937;
+            --glass: rgba(255, 255, 255, 0.85);
+            --glass-darker: rgba(255, 255, 255, 0.95);
+            --border-radius: 12px;
+            --transition: all 0.25s ease;
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
         html, body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', Arial, sans-serif;
-            background: url('https://images.unsplash.com/photo-1581091870622-df5f2ed3fc35?auto=format&fit=crop&w=1470&q=80') no-repeat center center;
-            background-size: cover;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f6f7fc 0%, #e9edf7 100%);
             min-height: 100vh;
-            position: relative;
+            color: var(--dark);
         }
 
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(245,245,247,0.35);
-            z-index: 0;
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
-        .article-container {
-            position: relative;
-            z-index: 1;
-            background: rgba(255,255,255,0.95);
-            border-radius: 16px;
-            padding: 3rem 2.5rem;
+        .navbar {
+            background: var(--glass);
+            backdrop-filter: blur(8px);
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .navbar-brand {
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 1.25rem;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem 1rem;
+        }
+
+        .ticket-card {
+            background: var(--glass);
+            border-radius: var(--border-radius);
+            padding: 2.5rem;
             max-width: 1000px;
-            margin: 4rem auto;
-            box-shadow: 0 24px 40px rgba(0,0,0,0.06);
-            backdrop-filter: blur(6px);
+            margin: 0 auto;
+            box-shadow: var(--shadow-md);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--gray-200);
+            animation: fadeIn 0.6s ease-out;
         }
 
-        h2 {
+        .ticket-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .ticket-title {
             font-weight: 700;
+            font-size: 1.75rem;
+            color: var(--dark);
             margin-bottom: 1rem;
-            color: #111827;
         }
 
-        .article-meta {
-            color: #6b7280;
+        .ticket-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
             margin-bottom: 1.5rem;
         }
 
-        .article-content {
-            color: #374151;
-            white-space: pre-wrap;  /* ✅ preserves line breaks */
-            line-height: 1.6;
-            font-size: 1rem;
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray-600);
+            font-size: 0.875rem;
         }
 
-        .btn-back {
-            display: inline-block;
+        .meta-item i {
+            font-size: 1.1rem;
+            color: var(--primary);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.4rem 0.85rem;
             border-radius: 9999px;
-            padding: 0.65rem 1.5rem;
-            font-weight: 600;
-            background-color: #111827;
-            color: #fff;
-            text-decoration: none;
-            transition: all 0.25s ease;
-            margin-top: 2rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            gap: 0.5rem;
         }
 
-        .btn-back:hover {
-            background-color: #1f2937;
+        .status-new {
+            background-color: rgba(79, 70, 229, 0.1);
+            color: var(--primary);
+        }
+
+        .status-in-progress {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .status-resolved {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .status-closed {
+            background-color: rgba(75, 85, 99, 0.1);
+            color: var(--gray-600);
+        }
+
+        .ticket-content {
+            color: var(--gray-800);
+            line-height: 1.7;
+            font-size: 1rem;
+            white-space: pre-wrap;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--glass-darker);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--gray-200);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .btn i {
+            font-size: 1.1rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            border-color: var(--primary-hover);
             transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            border-color: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #dc2626;
+            border-color: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--gray-100);
+            border: 1px solid var(--gray-200);
+            color: var(--dark);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--gray-200);
+            transform: translateY(-2px);
+        }
+
+        .ticket-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
 <body>
-<div class="article-container">  <!-- Reuse class for consistency -->
-    <h2 th:text="${ticket.subject}"></h2>
-    <p>Content: <span th:text="${ticket.content}"></span></p>
-    <p>Category: <span th:text="${ticket.category.name}"></span></p>
-    <p>Status: <span th:text="${ticket.status}"></span></p>
-    <p>Created At: <span th:text="${ticket.createdAt}"></span></p>
+<nav class="navbar navbar-expand-lg navbar-light sticky-top">
+    <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center" href="/">
+            <img th:src="@{/CareDeskLog.png}" alt="CareDesk Logo" height="30" class="me-2">
+            CareDesk
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/customer/dashboard">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/customer/tickets">My Tickets</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/faq">FAQ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
-    <a th:href="@{/customer/tickets/delete/{id}(id=${ticket.id})}" class="btn-back" onclick="return confirm('Delete this ticket?');">Delete</a>
-    <a href="/customer/tickets" class="btn-back">Back</a>
+<div class="main-content">
+    <div class="ticket-card">
+        <div class="ticket-header">
+            <h1 class="ticket-title" th:text="${ticket.subject}">Ticket Subject</h1>
+            <div class="ticket-meta">
+                <div class="meta-item">
+                    <i class="bi bi-folder"></i>
+                    <span th:text="${ticket.category.name}">Category</span>
+                </div>
+                <div class="meta-item">
+                    <i class="bi bi-clock"></i>
+                    <span th:text="${#temporals.format(ticket.createdAt, 'MMMM dd, yyyy HH:mm')}">Created Date</span>
+                </div>
+                <div class="meta-item">
+                    <i class="bi bi-tag"></i>
+                    <span th:class="'status-badge ' + 'status-' + ${#strings.toLowerCase(ticket.status.replace(' ', '-'))}">
+                            <i class="bi"
+                               th:classappend="${ticket.status == 'NEW' ? 'bi-star-fill' :
+                                               ticket.status == 'IN_PROGRESS' ? 'bi-hourglass-split' :
+                                               ticket.status == 'RESOLVED' ? 'bi-check-circle-fill' :
+                                               'bi-x-circle-fill'}"></i>
+                            <span th:text="${#strings.capitalize(#strings.toLowerCase(ticket.status.replace('_', ' ')))}">Status</span>
+                        </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="ticket-content" th:text="${ticket.content}">
+            Ticket content goes here...
+        </div>
+
+        <div class="ticket-actions">
+            <a th:href="@{/customer/tickets/delete/{id}(id=${ticket.id})}"
+               class="btn btn-danger"
+               onclick="return confirm('Are you sure you want to delete this ticket? This action cannot be undone.');">
+                <i class="bi bi-trash"></i>
+                Delete Ticket
+            </a>
+            <a href="/customer/tickets" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i>
+                Back to Tickets
+            </a>
+        </div>
+    </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

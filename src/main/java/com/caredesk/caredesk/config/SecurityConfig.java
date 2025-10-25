@@ -66,9 +66,30 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        // ... your existing requestMatchers
-                        .requestMatchers("/agent/**").hasRole("AGENT") // Secure agent routes
-                        .anyRequest().authenticated()
+                        // --- ADD THESE LINES FOR PUBLIC ACCESS ---
+                        .requestMatchers(
+                                "/",
+                                "/register",
+                                "/faq",
+                                "/faq/**",
+                                "/login",
+                                "/*.png",  // Allows access to CareDeskLog.png
+                                "/*.ico",
+                                "/css/**", // Common static folders
+                                "/js/**",
+                                "/images/**"
+                        ).permitAll()
+
+                        // --- YOUR SECURE ROUTES ---
+                        // (Assuming you have these from our previous conversations)
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/customer/**").hasRole("CUSTOMER")
+                        .requestMatchers("/agent/**").hasRole("AGENT")
+                        .requestMatchers("/customer/**", "/customer/notifications/**").hasRole("CUSTOMER")
+                        .requestMatchers("/admin/**", "/admin/notifications/**").hasRole("ADMIN")
+
+                        // --- CATCH-ALL RULE ---
+                        .anyRequest().authenticated() // All other requests require login
                 )
                 .formLogin(form -> form
                         .loginPage("/login")

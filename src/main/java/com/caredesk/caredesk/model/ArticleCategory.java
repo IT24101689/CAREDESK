@@ -1,6 +1,7 @@
 package com.caredesk.caredesk.model;
 
 import jakarta.persistence.*;
+import java.util.List; // Import the List class
 
 @Entity
 @Table(name = "article_categories")
@@ -14,6 +15,12 @@ public class ArticleCategory {
 
     private String description;
 
+    // --- ADD THIS FIELD ---
+    // This creates the other side of the relationship
+    // 'mappedBy = "category"' tells JPA that the 'Article' entity owns this relationship
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Article> articles;
+
     public ArticleCategory() {}
 
     // Getters and Setters
@@ -25,4 +32,8 @@ public class ArticleCategory {
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
+
+    // --- ADD GETTERS AND SETTERS for the new field ---
+    public List<Article> getArticles() { return articles; }
+    public void setArticles(List<Article> articles) { this.articles = articles; }
 }

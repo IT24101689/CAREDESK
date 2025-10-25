@@ -5,6 +5,7 @@ import com.caredesk.caredesk.model.Ticket;
 import com.caredesk.caredesk.model.TicketResponse;
 import com.caredesk.caredesk.repository.TicketRepository;
 import com.caredesk.caredesk.repository.TicketResponseRepository;
+import com.caredesk.caredesk.service.AgentTicketService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,9 @@ public class AgentTicketServiceImpl implements AgentTicketService {
 
     @Autowired
     private TicketResponseRepository responseRepository;
+
+    @Autowired
+    private NotificationService notificationService;
 
     @Override
     public List<Ticket> findTicketsByAgent(Agent agent) {
@@ -52,6 +56,12 @@ public class AgentTicketServiceImpl implements AgentTicketService {
         response.setAgent(agent);
         response.setCreatedAt(LocalDateTime.now());
 
-        return responseRepository.save(response);
+        TicketResponse savedResponse = responseRepository.save(response);
+
+
+        String message = "Agent " + agent.getName() + " responded to your ticket: '" + ticket.getSubject() + "'";
+        notificationService.createNotification(ticket.getCustomer(), ticket, message);
+
+        return savedResponse;
     }
 }
